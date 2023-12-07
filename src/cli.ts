@@ -28,6 +28,11 @@ export const getOptions = async () => {
 
   const opts = program.opts();
 
+  if (!opts.upload && !opts.download && !opts.web) {
+    console.error("[-] Provide atleast one action");
+    return null;
+  }
+
   if (opts.upload) {
     return {
       upload: opts.upload as string,
@@ -58,5 +63,7 @@ export const getOptions = async () => {
     };
   }
 
-  return null;
+  return {
+    server: opts.web as undefined | boolean,
+  };
 };
