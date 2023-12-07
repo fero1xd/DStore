@@ -1,0 +1,41 @@
+{
+  "id": "2af2ff1b-ffdc-435c-b520-1a7aba7dafc1",
+  "prevId": "96a257f3-3a7f-477b-81ff-ee01971e6fd4",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "files": {
+      "name": "files",
+      "schema": "dstore",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chunks": {
+          "name": "chunks",
+          "type": "varchar(255)[]",
+          "primaryKey": false,
+          "notNull": false,
+          "default": []
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "dstore": "dstore"
+  },
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

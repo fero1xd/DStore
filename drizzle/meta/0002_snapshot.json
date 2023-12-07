@@ -1,0 +1,54 @@
+{
+  "id": "1e78302a-99c7-4831-9136-dfa5d359057f",
+  "prevId": "2af2ff1b-ffdc-435c-b520-1a7aba7dafc1",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "files": {
+      "name": "files",
+      "schema": "dstore",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chunks": {
+          "name": "chunks",
+          "type": "varchar(255)[]",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "files_messageId_unique": {
+          "name": "files_messageId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "messageId"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "dstore": "dstore"
+  },
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

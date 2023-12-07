@@ -1,0 +1,48 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1701857606617,
+      "tag": "0000_flaky_bill_hollister",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1701857733094,
+      "tag": "0001_careful_purifiers",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1701858062246,
+      "tag": "0002_useful_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1701859074163,
+      "tag": "0003_misty_lake",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1701869529059,
+      "tag": "0004_nostalgic_gamora",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1701966309779,
+      "tag": "0005_loving_malcolm_colcord",
+      "breakpoints": true
+    }
+  ]
+}
