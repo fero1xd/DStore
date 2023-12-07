@@ -7,10 +7,12 @@
   "scripts": {
     "start:build": "node dist/index.js",
     "start:dev": "ts-node-dev src/index.ts",
+    "typecheck": "tsc --noEmit",
     "build": "tsc",
     "build:dev": "tsc --watch",
     "migrations:generate": "npx drizzle-kit generate:pg --schema ./src/database/schema.ts",
-    "migrations:push": "ts-node ./src/database/migrate.ts"
+    "migrations:push": "ts-node ./src/database/migrate.ts",
+    "ci": "pnpm run typecheck && pnpm run build"
   },
   "keywords": [],
   "author": "",
