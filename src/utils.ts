@@ -1,10 +1,13 @@
 import fs from "fs";
+import { createLogger } from "./logger";
 
 type CheckExistsOptions = {
   isDir: boolean;
   readPerm: boolean;
   filename: string;
 };
+
+const logger = createLogger("utils");
 
 export const checkExists = async ({
   filename,
@@ -15,12 +18,12 @@ export const checkExists = async ({
     const stats = fs.statSync(filename);
 
     if (isDir && stats.isFile()) {
-      console.error("Provided a file not a directory");
+      logger.error("Provided a file not a directory");
       return false;
     }
 
     if (!isDir && stats.isDirectory()) {
-      console.error("Provided a directory not a file");
+      logger.error("Provided a directory not a file");
       return false;
     }
 
@@ -29,7 +32,7 @@ export const checkExists = async ({
     return true;
   } catch (err) {
     // console.error(err);
-    console.log(`Cannot read ${isDir ? "directory" : "file"}`);
+    logger.error(`Cannot read ${isDir ? "directory" : "file"}`);
   }
 
   return false;

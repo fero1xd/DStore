@@ -1,7 +1,9 @@
 import { Command, Option } from "commander";
 import { checkExists } from "./utils";
+import { createLogger } from "./logger";
 
 export const getOptions = async () => {
+  const logger = createLogger("cli");
   const program = new Command()
     .name("dstore")
     .description("CLI for uploading and downloading files")
@@ -29,11 +31,20 @@ export const getOptions = async () => {
   const opts = program.opts();
 
   if (!opts.upload && !opts.download && !opts.web) {
-    console.error("[-] Provide atleast one action");
+    logger.error("Provide atleast one action");
     return null;
   }
 
   if (opts.upload) {
+    if (
+      !(await checkExists({
+        filename: opts.upload,
+        readPerm: true,
+        isDir: false,
+      }))
+    ) {
+      return null;
+    }
     return {
       upload: opts.upload as string,
       server: opts.web as undefined | boolean,
@@ -42,7 +53,7 @@ export const getOptions = async () => {
 
   if (opts.download) {
     if (!opts.path) {
-      console.error("Provide a directory path '--path [dir]'");
+      logger.error("Provide a directory path '--path [dir]'");
       return null;
     }
 

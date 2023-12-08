@@ -2,43 +2,26 @@ import "dotenv/config";
 import { Client, GatewayIntentBits } from "discord.js";
 import { handleEvents } from "./handler";
 import { getOptions } from "./cli";
-import { checkExists } from "./utils";
 import { getFile } from "./database/ops";
+import { createLogger } from "./logger";
+import { env } from "./env";
 
 export const main = async () => {
   const options = await getOptions();
+  const logger = createLogger();
 
-  if (options === null) return;
-
-  if (
-    options.upload &&
-    !(await checkExists({
-      filename: options.upload,
-      readPerm: true,
-      isDir: false,
-    }))
-  ) {
-    return;
+  if (options === null) {
+    process.exit(-1);
   }
 
   if (options.download && !(await getFile(options.download))) {
-    console.error("File not found");
-    return;
+    logger.error("File not found");
+    process.exit(-1);
   }
 
-  const APPLICATION_SECRET = process.env.APPLICATION_SECRET;
   const client = new Client({
     intents: [GatewayIntentBits.Guilds],
   });
-
-  if (!APPLICATION_SECRET) {
-    console.log("Provide your discord bot token");
-    process.exit(-1);
-  }
-  if (!process.env.TEST_CHANNEL_ID) {
-    console.log("Provide a channel id");
-    process.exit(-1);
-  }
 
   handleEvents({
     client,
@@ -48,5 +31,5 @@ export const main = async () => {
 
     path: options?.path,
   });
-  client.login(APPLICATION_SECRET);
+  client.login(env.APPLICATION_SECRET);
 };

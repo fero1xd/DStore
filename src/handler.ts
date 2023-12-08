@@ -4,7 +4,7 @@ import { Readable, Writable } from "stream";
 import { createServer } from "./server";
 import { assembleFile, uploadFile } from "./chunking";
 import { getFile } from "./database/ops";
-import { File } from "./database/types";
+import { createLogger } from "./logger";
 
 type Options = {
   client: Client;
@@ -23,28 +23,55 @@ export const handleEvents = async ({
   upload,
   path,
 }: Options) => {
+  const logger = createLogger("handler");
+
   client.once("ready", async function (client) {
-    console.log(`${client.user.username} is ready`);
+    logger.success(`${client.user.username} is ready`);
 
     const channel = await client.channels.fetch(process.env.TEST_CHANNEL_ID!);
     if (!channel) {
-      console.log("Unknown channel");
+      logger.error("Unknown channel");
       process.exit(-1);
     }
 
     if (channel?.type !== ChannelType.GuildText) {
-      console.log("Channel is not in text mode");
+      logger.error("Channel is not in text mode");
       process.exit(-1);
     }
 
     server && createServer(channel);
 
     if (upload) {
-      uploadFile(upload, channel);
+      const res = await uploadFile(upload, channel);
+      if (res?.error) {
+        await client.destroy();
+        process.exit(-1);
+      }
     } else if (download) {
-      const file = (await getFile(download)) as File;
-      assembleFile(file, path!, channel);
+      const file = await getFile(download);
+
+      if (!file) {
+        logger.error("File not found");
+        await client.destroy();
+        process.exit(-1);
+      }
+
+      const res = await assembleFile(file, path!, channel);
+
+      if (res?.error) {
+        await client.destroy();
+        process.exit(-1);
+      }
     }
+
+    if (!server) {
+      await client.destroy();
+      process.exit(0);
+    }
+  });
+
+  client.on("shardDisconnect", () => {
+    logger.warn("Bot Disconnected");
   });
 };
 
